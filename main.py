@@ -57,15 +57,16 @@ async def transcribe_audio(file: UploadFile = File(...), x_api_keys: str = Heade
                 transcription = client.audio.transcriptions.create(
                     file=(file.filename, audio_file.read()),
                     model="whisper-large-v3",
-                    response_format="text"
+                    response_format="text" # သတိပြုရန်: Groq တွင် srt တိုက်ရိုက်မရသဖြင့် text သာထားပါ
                 )
             os.remove(file_location)
             return {"srt_content": transcription}
         except Exception as e:
+            # နောက်ဆုံး Key အထိ စမ်းလို့မရရင် တကယ့် Error အစစ် (str(e)) ကို Frontend ဆီ ပို့ပေးပါမည်
             if index == len(api_key_list) - 1:
                 if os.path.exists(file_location):
                     os.remove(file_location)
-                raise HTTPException(status_code=400, detail="Keys အားလုံး Limit ပြည့်သွားပါပြီ။ နောက်တစ်ခု ပြောင်းထည့်ပါ။")
+                raise HTTPException(status_code=400, detail=f"API မှ လက်မခံပါ: {str(e)}")
             continue
 
 # (၃) TTS Endpoint - Edge TTS ဖြင့် အသံထုတ်လုပ်ရန် (Frontend မှ Error ကို ဖြေရှင်းရန်)
