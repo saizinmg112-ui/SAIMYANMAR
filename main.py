@@ -54,11 +54,13 @@ async def transcribe_audio(file: UploadFile = File(...), x_api_keys: str = Heade
         try:
             client = Groq(api_key=current_key)
             with open(file_location, "rb") as audio_file:
+                # ဖိုင်ကို ဒီပုံစံအတိုင်း ပို့ပေးပါ
                 transcription = client.audio.transcriptions.create(
-                    file=(file.filename, audio_file.read()),
+                    file=(file.filename, audio_file), # audio_file.read() အစား audio_file ကို တိုက်ရိုက်ပေးလိုက်ပါ
                     model="whisper-large-v3",
-                    response_format="text" # သတိပြုရန်: Groq တွင် srt တိုက်ရိုက်မရသဖြင့် text သာထားပါ
+                    response_format="text"
                 )
+            # ... ကျန်တဲ့ ကုဒ်များ ...
             os.remove(file_location)
             return {"srt_content": transcription}
         except Exception as e:
