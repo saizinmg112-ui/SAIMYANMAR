@@ -120,6 +120,7 @@
                 </div>
                 <h3 class="text-xl font-semibold">MP3 ကို ဆွဲထည့်ပါ</h3>
                 <p class="text-sm text-gray-400">MP3, WAV, M4A · အများဆုံး 200MB (Max 10 mins)</p>
+                <input type="text" id="api-key-input" class="w-full max-w-md bg-black/20 border border-white/10 rounded-xl p-3 text-white placeholder-gray-500 text-center mt-2 focus:outline-none focus:border-blue-400" placeholder="Groq API Keys (ကော်မာ , ခြားပြီး ၅ ခုအထိ ထည့်နိုင်သည်)">
                 <button onclick="document.getElementById('file-upload').click()" class="mt-4 bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-2 rounded-xl text-sm transition">
                     ဖိုင်ရွေးပါ
                 </button>
@@ -191,7 +192,7 @@
 
     <script>
         // API Base URL (Change this to your actual deployed backend URL later)
-        const API_URL = "https://saimyanmar.onrender.com"; 
+        const API_URL = "https://deeplearn-audio-studio.fly.dev"; 
 
         // Tab Switching Logic
         function switchTab(tab) {
@@ -285,6 +286,9 @@
                 // Send to backend
                 const response = await fetch(`${API_URL}/api/transcribe`, {
                     method: 'POST',
+                    headers: {
+                        'x-api-keys': document.getElementById('api-key-input').value
+                    },
                     body: formData
                 });
 
