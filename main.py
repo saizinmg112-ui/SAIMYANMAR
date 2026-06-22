@@ -35,7 +35,7 @@ async def transcribe_audio(file: UploadFile = File(...), x_api_keys: str = Heade
                     response_format="text"
                 )
             os.remove(file_location)
-            return {"text": transcription}
+            return {"srt_content": transcription}
         except Exception as e:
             if index == len(api_key_list) - 1:
                 if os.path.exists(file_location):
